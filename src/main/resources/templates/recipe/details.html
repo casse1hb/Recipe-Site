@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav"></nav>
+
+<section>
+    <div th:replace="layout :: flash"></div>
+    <div class="container wrapper">
+        <div class="recipe-list single" th:object="${recipe}">
+            <div class="recipe">
+                <h2 th:text="*{name}">Website Recipe</h2>
+                <h3>Conceived on: <span th:text="*{#temporals.format(startDate, 'dd MMM yyyy')}"></span></h3>
+                <p th:text="*{description}">Design and build a custom website</p>
+                <span class="tag" th:text="*{status.name}" th:classappend="*{status.state}">Active</span>
+                <a class="button button-delete" th:href="@{|/recipes/${recipe.id}/delete|}">
+                    <i class="material-icons md-18">delete</i>
+                </a>
+            </div>
+            <div class="ingredients-portions">
+                <h3>Ingredients &amp; Portions</h3>
+                <div class="list-item" th:if="*{ingredientsNeeded.isEmpty()}">There are no ingredients and portions assigned to
+                    this
+                    recipe
+                </div>
+                <div class="list-item" th:each="ingredient : *{emptyIngredients}">
+                    <span class="primary" th:text="${ingredient.name}">Developer</span>
+                    <span class="secondary">No portion assigned</span>
+                </div>
+                <div class="list-item" th:each="portion : *{portions}">
+                    <span class="primary" th:if="${portion.ingredient} != null" th:text="${portion.ingredient.name}">Developer</span>
+                    <span class="secondary" th:text="${portion.name}">Michael Pemulis</span>
+                </div>
+            </div>
+            <div class="actions">
+                <a class="button" th:href="@{|/recipes/*{id}/edit|}">Edit Recipe</a>
+                <a class="button" th:href="@{|/recipes/*{id}/portions|}">Edit Portions</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+
+</html>

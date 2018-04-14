@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav"></nav>
+
+<section>
+    <div th:replace="layout :: flash"></div>
+    <div class="container wrapper">
+        <div class="recipe-list">
+            <div class="recipe" th:each="recipe : ${recipes}">
+                <h2><a th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}">Website Recipe</a></h2>
+                <h3>Conceived on: <span th:text="${#temporals.format(recipe.startDate, 'dd MMM yyyy')}"></span></h3>
+                <p th:text="${recipe.description}">Design and build a custom website</p>
+                <span class="tag" th:text="${recipe.status.name}"
+                      th:classappend="${recipe.status.state}">Active</span>
+                <a class="button button-delete" th:href="@{|/recipes/${recipe.id}/delete|}">
+                    <i class="material-icons md-18">delete</i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+
+</html>

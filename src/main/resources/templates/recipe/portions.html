@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav"></nav>
+
+<section>
+    <div th:replace="layout :: flash"></div>
+    <div class="container wrapper">
+        <form th:action="@{/recipes/save}" method="post" th:object="${recipe}">
+            <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{startDate}"/>
+            <input type="hidden" th:field="*{description}"/>
+            <input type="hidden" th:field="*{name}"/>
+            <input type="hidden" th:field="*{status}"/>
+            <label>Edit Portions: <span th:text="*{name}"></span></label>
+            <div th:if="*{ingredientsNeeded.isEmpty()}">There are no ingredientsNeeded assigned to this recipe. Please edit the
+                recipe to add
+                the needed ingredientsNeeded.
+            </div>
+            <ul class="checkbox-list">
+                <li th:each="ingredient : *{ingredientsNeeded}">
+                    <span class="primary" th:text="${ingredient.name}">Developer</span>
+                    <input type="hidden" th:field="*{ingredientsNeeded[__${ingredientStat.index}__].id}" th:value="${ingredient.id}"/>
+                    <div class="custom-select">
+                        <span class="dropdown-arrow"></span>
+                        <select th:field="*{portions}">
+                            <option th:each="portion : ${ingredient.portions}" th:value="${portion.id}"
+                                    th:text="${portion.name}">Portion Name
+                            </option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <div class="actions">
+                <input type="submit" value="Save" class="button">
+                <a th:href="@{|/recipes/*{id}|}" class="button button-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+</body>
+
+</html>

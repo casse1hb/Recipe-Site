@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head"></head>
+
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav"></nav>
+
+<section>
+    <div th:replace="layout :: flash"></div>
+    <div class="container wrapper">
+        <form th:action="@{${action}}" method="post">
+            <h2>Manage Portions</h2>
+            <ul class="checkbox-list">
+                <li class="portion-list" th:each="coll : ${portions}">
+                    <div class="portion">
+                        <a th:href="@{|/portions/${coll.id}|}">
+                            <span class="primary" th:text="${coll.name}"></span>
+                            <span class="secondary"
+                                  th:text="${coll.ingredient} == null ? 'No ingredient assigned' : ${coll.ingredient.name}"></span>
+                        </a>
+                    </div>
+                    <a class="button button-delete" th:href="@{|portions/${coll.id}/delete|}">
+                        <i class="material-icons md-18">delete</i>
+                    </a>
+                </li>
+            </ul>
+            <div class="actions add-new-portion" th:object="${portion}">
+                <input th:field="*{id}" type="hidden"/>
+                <input th:field="*{name}" type="text" th:classappend="${#fields.hasErrors('name')} ? 'error' : '' "
+                       placeholder="Name..."/>
+                <div class="custom-select">
+                    <span class="dropdown-arrow"></span>
+                    <select th:field="*{ingredient.id}" th:classappend="${#fields.hasErrors('ingredient')} ? 'error' : '' ">
+                        <option value="" disabled="disabled">Select a ingredient</option>
+                        <option th:each="ingredient : ${allIngredients}" th:value="${ingredient.id}" th:text="${ingredient.name}"></option>
+                    </select>
+                </div>
+                <button class="button button-add" type="submit"><i class="material-icons">save</i></button>
+                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                <div class="error-message" th:if="${#fields.hasErrors('ingredient')}" th:errors="*{ingredient}"></div>
+            </div>
+        </form>
+    </div>
+</section>
+
+</body>
+
+</html>
